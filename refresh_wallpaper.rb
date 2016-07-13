@@ -35,9 +35,9 @@ Dir.mkdir tmp_path unless File.exists?(tmp_path)
   end
 end
 
-`montage #{(0...level).collect{|y| (0...level).collect{|x| File.join(tmp_path, "#{base_file_name}_#{x}_#{y}.png")}}.join(' ')} -geometry '1x1+0+0<' -background none #{raw_path}`
+`/usr/local/bin/montage #{(0...level).collect{|y| (0...level).collect{|x| File.join(tmp_path, "#{base_file_name}_#{x}_#{y}.png")}}.join(' ')} -geometry '1x1+0+0<' -background none #{raw_path}`
 
-`convert -resize 2880x1800 -gravity center -extent 2880x1800 #{raw_path} #{final_path}`
+`/usr/local/bin/convert -resize 2880x1800 -gravity center -extent 2880x1800 #{raw_path} #{final_path}`
 
 `find #{tmp_path}/ -name "*.png" -delete`
 

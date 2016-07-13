@@ -20,20 +20,25 @@ final_path      = File.join(__dir__, 'current.png')
 
 Dir.mkdir tmp_path unless File.exists?(tmp_path)
 
+threads = []
+
 (0...level).each do |y|
   (0...level).each do |x|
     file_name = "#{base_file_name}_#{x}_#{y}.png"
     tile_url  = "http://himawari8-dl.nict.go.jp/himawari8/img/D531106/#{level}d/#{width}/#{year}/#{"%02d" % month}/#{"%02d" % day}/#{file_name}"
 
-    puts tile_url
-
-    open(tile_url) do |f|
-      File.open(File.join(tmp_path, file_name), "wb") do |file|
-       file.puts f.read
+    threads << Thread.new do
+      open(tile_url) do |f|
+        puts tile_url
+        File.open(File.join(tmp_path, file_name), "wb") do |file|
+         file.puts f.read
+        end
       end
     end
   end
 end
+
+threads.each(&:join)
 
 `/usr/local/bin/montage #{(0...level).collect{|y| (0...level).collect{|x| File.join(tmp_path, "#{base_file_name}_#{x}_#{y}.png")}}.join(' ')} -geometry '1x1+0+0<' -background none #{raw_path}`
 

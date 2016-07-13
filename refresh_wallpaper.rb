@@ -28,9 +28,9 @@ Dir.mkdir tmp_path unless File.exists?(tmp_path)
     puts tile_url
 
     open(tile_url) do |f|
-       File.open(File.join(tmp_path, file_name), "wb") do |file|
-         file.puts f.read
-       end
+      File.open(File.join(tmp_path, file_name), "wb") do |file|
+       file.puts f.read
+      end
     end
   end
 end

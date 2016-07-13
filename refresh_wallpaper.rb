@@ -18,7 +18,7 @@ tmp_path        = File.join(__dir__, 'tmp')
 raw_path        = File.join(__dir__, 'raw.png')
 final_path      = File.join(__dir__, 'current.png')
 
-Dir.mkdir tmp_path
+Dir.mkdir tmp_path unless File.exists?(tmp_path)
 
 (0...level).each do |y|
   (0...level).each do |x|
@@ -41,4 +41,4 @@ end
 
 `find #{tmp_path}/ -name "*.png" -delete`
 
-`osascript -e 'tell application "Finder" to set desktop picture to POSIX file "#{final_path}"'`
+`#{File.join(__dir__, 'change_desktop.sh')}`

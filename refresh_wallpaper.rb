@@ -12,6 +12,7 @@ day             = current_time.day
 hour            = current_time.hour
 minute          = (current_time.min / 10) * 10
 second          = 0
+resolution      = `system_profiler SPDisplaysDataType | grep Resolution | egrep -o "[0-9]+\sx\s[0-9]+"`.chomp.gsub(/\s/, '')
 
 base_file_name  = "#{"%02d" % hour}#{"%02d" % minute}#{"%02d" % second}"
 tmp_path        = File.join(__dir__, 'tmp')
@@ -42,7 +43,7 @@ threads.each(&:join)
 
 `/usr/local/bin/montage #{(0...level).collect{|y| (0...level).collect{|x| File.join(tmp_path, "#{base_file_name}_#{x}_#{y}.png")}}.join(' ')} -geometry '1x1+0+0<' -background none #{raw_path}`
 
-`/usr/local/bin/convert -resize 2880x1800 -gravity center -extent 2880x1800 #{raw_path} #{final_path}`
+`/usr/local/bin/convert -resize #{resolution} -gravity center -extent #{resolution} #{raw_path} #{final_path}`
 
 `find #{tmp_path}/ -name "*.png" -delete`
 
